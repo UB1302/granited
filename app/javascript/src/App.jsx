@@ -12,7 +12,6 @@ const App = () => {
   useEffect(() => {
     setAuthHeaders(setLoading);
     initializeLogger();
-    setAuthHeaders(setLoading);
   }, []);
 
   if (loading) {
