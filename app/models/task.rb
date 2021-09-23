@@ -2,10 +2,18 @@
 
 class Task < ApplicationRecord
   validates :title, presence: true, length: { maximum: 50 }
+  belongs_to :user
   validates :slug, uniqueness: true
   validate :slug_not_changed
 
   before_create :set_slug
+
+  # before_validation :set_title
+  # validates :title, presence: true
+
+  # def set_title
+  #   self.title = "Pay electricity bill"
+  # end
 
   private
 

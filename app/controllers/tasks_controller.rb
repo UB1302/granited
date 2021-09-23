@@ -2,6 +2,7 @@
 
 class TasksController < ApplicationController
   before_action :load_task, only: %i[show update destroy]
+
   def index
     tasks = Task.all
     render status: :ok, json: { tasks: tasks }
@@ -10,7 +11,7 @@ class TasksController < ApplicationController
   def create
     task = Task.new(task_params)
     if task.save
-      render status: :ok, json: { notice: t("successfully_created") }
+      render status: :ok, json: { notice: "Task was successfully created" }
     else
       errors = task.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { error: errors }
@@ -18,7 +19,7 @@ class TasksController < ApplicationController
   end
 
   def show
-    render status: :ok, json: { task: @task }
+    render status: :ok, json: { task: @task, assigned_user: @task.user }
   end
 
   def update
@@ -42,7 +43,7 @@ class TasksController < ApplicationController
   private
 
     def task_params
-      params.require(:task).permit(:title)
+      params.require(:task).permit(:title, :user_id)
     end
 
     def load_task
