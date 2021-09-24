@@ -8,4 +8,6 @@ json.task do
     json.id @task.user.id
     json.name @task.user.name
   end
+
+  json.task_creator @task_creator
 end
