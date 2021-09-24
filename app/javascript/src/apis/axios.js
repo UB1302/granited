@@ -52,3 +52,8 @@ export const setAuthHeaders = (setLoading = () => null) => {
   }
   setLoading(false);
 };
+
+export const resetAuthTokens = () => {
+  delete axios.defaults.headers["X-Auth-Email"];
+  delete axios.defaults.headers["X-Auth-Token"];
+};
