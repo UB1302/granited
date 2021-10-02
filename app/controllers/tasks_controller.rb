@@ -9,8 +9,8 @@ class TasksController < ApplicationController
 
   def index
     tasks = policy_scope(Task)
-    @pending_tasks = tasks.pending.as_json(include: { user: { only: %i[name id] } })
-    @completed_tasks = tasks.completed
+    @pending_tasks = tasks.of_status(:pending).as_json(include: { user: { only: %i[name id] } })
+    @completed_tasks = tasks.of_status(:completed)
   end
 
   def create
@@ -54,7 +54,14 @@ class TasksController < ApplicationController
   private
 
     def task_params
-      params.require(:task).permit(:title, :user_id, :progress)
+      params.require(:task).permit(:title, :user_id, :progress, :status)
+    end
+
+    def load_task
+      @task = Task.find_by(slug: params[:slug])
+      unless @task
+        render status: :not_found, json: { error: t("task.not_found") }
+      end
     end
 
     def ensure_authorized_update_to_restricted_attrs
@@ -62,13 +69,6 @@ class TasksController < ApplicationController
       is_not_owner = @task.creator_id != @current_user.id
       if is_editing_restricted_params && is_not_owner
         handle_authorization_error
-      end
-    end
-
-    def load_task
-      @task = Task.find_by(slug: params[:slug])
-      unless @task
-        render status: :not_found, json: { error: t("task.not_found") }
       end
     end
 end
