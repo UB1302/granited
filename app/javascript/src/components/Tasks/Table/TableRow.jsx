@@ -61,7 +61,7 @@ const TableRow = ({
                         rowData.status !== "starred"
                     },
                     {
-                      "text-white text-bb-yellow ri-star-fill":
+                      "text-bb-yellow ri-star-fill":
                         rowData.status === "starred"
                     }
                   )}
